@@ -1,0 +1,6 @@
+@JStudio.Api_HostAddress = http://localhost:5263
+
+GET {{JStudio.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
