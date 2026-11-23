@@ -17,10 +17,18 @@ var app = builder.Build(); // Stänger containern, ingredienserna till bygget av
 
 // "Appandet nedan" styr hur varje anrop hanteras och ordningen här är vital
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.UseSwaggerUI(swaggerOptions =>
+    {
+        swaggerOptions.SwaggerEndpoint("/openapi/v1.json", "JStudio api");
+        swaggerOptions.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
