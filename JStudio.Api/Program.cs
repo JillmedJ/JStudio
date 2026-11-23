@@ -1,6 +1,7 @@
 using JStudio.Api.Data;
 using JStudio.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args); // Byggaren skapas
@@ -13,7 +14,8 @@ builder.Services.AddControllers().AddJsonOptions(jsonOptions =>
     jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(openApiOptions =>
+    openApiOptions.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0);
 
 builder.Services.AddScoped<IAdService, AdService>();
 

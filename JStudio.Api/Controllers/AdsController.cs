@@ -21,7 +21,19 @@ namespace JStudio.Api.Controllers
             var ads = await _adService.GetAllAdsAsync();
 
             return Ok(ads);
-        
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Ad>> GetSingleAdById(int id)
+        {
+            var ad = await _adService.GetSingleAdByIdAsync(id);
+
+            if (ad == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ad);
         }
 
     } 
