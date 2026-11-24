@@ -13,4 +13,5 @@ public interface IAdService
     Task<Ad?> GetSingleAdByIdAsync(int id);
 
     Task<Ad> CreateAdAsync(CreateAdDto createAdDto);
+    Task<bool> UpdateAdAsync(int id, UpdateAdDto updateAdDto);
 }
