@@ -1,3 +1,4 @@
+using JStudio.Api.DTOs;
 using JStudio.Api.Entities;  // Ad bor i Entities
 
 namespace JStudio.Api.Services; // Interfacet bor i Services
@@ -10,4 +11,6 @@ public interface IAdService
     // Hämtar EN annons. Tar emot ett id (typ: int, namn: id).
     // Ad? = annonsen kan saknas (null) om id:t inte finns.
     Task<Ad?> GetSingleAdByIdAsync(int id);
+
+    Task<Ad> CreateAdAsync(CreateAdDto createAdDto);
 }
