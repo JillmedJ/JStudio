@@ -1,5 +1,8 @@
 using JStudio.Api.Data;
+using JStudio.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args); // Byggaren skapas
 
@@ -7,10 +10,14 @@ var builder = WebApplication.CreateBuilder(args); // Byggaren skapas
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); // Kontakt med SqlServer och aktuell databas med hjälp av connectionString
 
+builder.Services.AddControllers().AddJsonOptions(jsonOptions => 
+    jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(openApiOptions =>
+    openApiOptions.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0);
+
+builder.Services.AddScoped<IAdService, AdService>();
 
 var app = builder.Build(); // Stänger containern, ingredienserna till bygget av appen
 
