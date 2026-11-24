@@ -1,6 +1,7 @@
 ﻿using JStudio.Api.Data;
 using JStudio.Api.DTOs;
 using JStudio.Api.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace JStudio.Api.Services
@@ -44,7 +45,30 @@ namespace JStudio.Api.Services
             await _applicationDbContext.SaveChangesAsync();
 
             return ad;
-            
+
+        }
+
+        public async Task<bool> UpdateAdAsync(int id, UpdateAdDto updateAdDto)
+        {
+            var adToUpdate = await GetSingleAdByIdAsync(id);
+
+            if (adToUpdate == null)
+            {
+                return false;
+            }
+
+            adToUpdate.Title = updateAdDto.Title;
+            adToUpdate.Price = updateAdDto.Price;
+            adToUpdate.Description = updateAdDto.Description;
+            adToUpdate.Location = updateAdDto.Location;
+            adToUpdate.ImageUrl = updateAdDto.ImageUrl;
+            adToUpdate.Category = updateAdDto.Category;
+            adToUpdate.Updated = DateTime.UtcNow;
+
+            await _applicationDbContext.SaveChangesAsync();
+
+            return true;
+
         }
     }
 }
