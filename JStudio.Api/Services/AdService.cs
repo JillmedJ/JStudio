@@ -70,5 +70,21 @@ namespace JStudio.Api.Services
             return true;
 
         }
+
+        public async Task<bool> DeleteAdAsync(int id)
+        {
+            var adToDelete = await GetSingleAdByIdAsync(id);
+
+            if (adToDelete == null)
+            {
+                return false;
+            }
+
+            _applicationDbContext.Ads.Remove(adToDelete);
+
+            await _applicationDbContext.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

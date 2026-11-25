@@ -66,5 +66,21 @@ namespace JStudio.Api.Controllers
             
             return NoContent(); // låter negativt men är en kod av kategorin 200 nämligen 204
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAd(int id)
+        { 
+            bool isDeleted = await _adService.DeleteAdAsync(id);
+
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     } 
 }
