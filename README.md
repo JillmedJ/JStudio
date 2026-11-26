@@ -13,7 +13,7 @@ Inlämningsuppgift **APIAnnons** i kursen *Programmering med C# .NET*, YH Akadem
 
 ## Det här behöver du
 
-- **.NET 10 SDK**
+- **.NET 10 SDK** (verktygen för att bygga och köra .NET-projekt, ingår oftast i Visual Studio)
 - **Visual Studio** med arbetsbelastningen *ASP.NET and web development*
 - **SQL Server** på den egna datorn (`localhost`, Windows Authentication)
 
@@ -26,7 +26,7 @@ NuGet-paketen (EF Core, Swashbuckle med flera) står i `JStudio.Api.csproj` och 
    ```
    Server=localhost;Database=JStudioDb;Trusted_Connection=True;TrustServerCertificate=true
    ```
-   Har din SQL Server ett annat namn, till exempel `localhost\SQLEXPRESS`, ändrar du `Server=`.
+   Har din SQL Server ett annat namn, byter du ut `localhost` efter `Server=` mot det namnet. Namnet ser du i SSMS när du ansluter (rutan *Server name*). Till exempel: `Server=localhost\SQLEXPRESS;Database=JStudioDb;...`
 3. Tryck **F5**.
    - Databasen **`JStudioDb` skapas automatiskt** vid start (`Database.Migrate()` i `Program.cs`). Du behöver inte köra `Update-Database`.
    - **Swagger** öppnas direkt på startsidan, `https://localhost:7170/`.
