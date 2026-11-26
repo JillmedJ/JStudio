@@ -1,6 +1,126 @@
 @JStudio.Api_HostAddress = http://localhost:5263
 
-GET {{JStudio.Api_HostAddress}}/weatherforecast/
+# Kör POST först. Byt 28 i PUT och DELETE mot det id som POST ger.
+
+# OK – förväntat 200.
+GET {{JStudio.Api_HostAddress}}/Ads/
 Accept: application/json
 
 ###
+# OK – förväntat 200.
+GET {{JStudio.Api_HostAddress}}/Ads/2
+Accept: application/json
+
+###
+# Finns inte Not Found – förväntat 404.
+GET {{JStudio.Api_HostAddress}}/Ads/12
+Accept: application/json
+
+###
+# Ogiltig förfrågan Bad Request – förväntat 400.
+GET {{JStudio.Api_HostAddress}}/Ads/abc
+Accept: application/json
+
+###
+# Skapad Created – förväntat 201.
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 54,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Ogiltig förfrågan Bad Request – förväntat 400 för att "abc" inte är decimal ("could not be converted to System.Decimal").
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": "abc",
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Ogiltig förfrågan Bad Request – förväntat 400 för att abc gör att JSON inte kan läsas = trasig syntax ("'a' is an invalid start of a value")
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": abc,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Fel metod Method Not Allowed – förväntat 405 (POST har inget id i adressen).
+# 405 Method Not Allowed (adressen finns i praktiken, men är ej nåbar med denna metod). (jämför med 404 adressen hittas inte alls)
+POST {{JStudio.Api_HostAddress}}/Ads/abc
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 54,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Uppdaterad (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
+PUT {{JStudio.Api_HostAddress}}/Ads/28
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 23,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Finns inte Not Found – förväntat 404.
+PUT {{JStudio.Api_HostAddress}}/Ads/12
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 23,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Borttagen (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
+DELETE {{JStudio.Api_HostAddress}}/Ads/28
+Accept: application/json
+
+###
+# Finns inte Not Found – förväntat 404.
+DELETE {{JStudio.Api_HostAddress}}/Ads/28
+Accept: application/json 
+
+###
+# Ogiltig förfrågan Bad Request – förväntat 400.
+DELETE {{JStudio.Api_HostAddress}}/Ads/abc
+Accept: application/json 
+
+
+
+
