@@ -1,4 +1,5 @@
 ﻿// var typen ska leta för att få det den behöver (bor den andra typen på samma adress behovs ingen using)
+using Microsoft.EntityFrameworkCore;
 
 namespace JStudio.Api.Entities //var typen bor
 {
@@ -15,6 +16,8 @@ namespace JStudio.Api.Entities //var typen bor
         // By ad owner
 
         public string Title { get; set; } = string.Empty;
+
+        [Precision(18, 2)]
         public decimal Price { get; set; }
         public string Description { get; set; } = string.Empty; // passar vid Code First (= null!; passar/kommer från databasen vid möjligt null)
 
