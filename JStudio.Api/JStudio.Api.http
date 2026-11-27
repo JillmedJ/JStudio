@@ -4,27 +4,27 @@
 
 # Testnumren (Test 1, Test 2 …) är samma som i testloggen i "Redovisning APIAnnons.md".
 
-# Test 1 – OK – förväntat 200.
+# Test 1 – OK – förväntat 200 OK - resultat: 200 OK
 GET {{JStudio.Api_HostAddress}}/Ads/
 Accept: application/json
 
 ###
-# Test 2 – OK – förväntat 200.
+# Test 2 – OK – förväntat 200 OK - resultat: 200 OK
 GET {{JStudio.Api_HostAddress}}/Ads/2
 Accept: application/json
 
 ###
-# Test 3 – Finns inte Not Found – förväntat 404.
+# Test 3 – förväntat 404 – resultt Finns inte 404 Not Found 
 GET {{JStudio.Api_HostAddress}}/Ads/12
 Accept: application/json
 
 ###
-# Test 4 – Ogiltig förfrågan Bad Request – förväntat 400.
+# Test 4 – förväntat 400 – resultat Ogiltig förfrågan Bad Request
 GET {{JStudio.Api_HostAddress}}/Ads/abc
 Accept: application/json
 
 ###
-# Test 5 – Skapad Created – förväntat 201. (Också regressionstest efter valideringen: en giltig annons ska godkännas.)
+# Test 5 – förväntat 201 – resultat Skapad 201 Created
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -38,7 +38,7 @@ Content-Type: application/json
 }
 
 ###
-# Test 6 – Ogiltig förfrågan Bad Request – förväntat 400 för att "abc" inte är decimal ("could not be converted to System.Decimal").
+# Test 6 – förväntat 400 för att "abc" inte är decimal ("could not be converted to System.Decimal") – resultat: Ogiltig förfrågan Bad Request 400 
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -50,9 +50,11 @@ Content-Type: application/json
   "imageUrl": null,
   "category": "BallpointPens"
 }
+###
+# Test 7 (tom titel + NotSet i samma anrop) är uppdelat i Validering 1 och 2 – ett fel per test.
 
 ###
-# Test 14 – Ogiltig förfrågan Bad Request – förväntat 400 för att abc gör att JSON inte kan läsas = trasig syntax ("'a' is an invalid start of a value")
+# Test 14 – förväntat 400 för att abc gör att JSON inte kan läsas = trasig syntax ("'a' is an invalid start of a value") – resultat: Ogiltig förfrågan Bad Request 400
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -66,7 +68,7 @@ Content-Type: application/json
 }
 
 ###
-# Test 15 – Fel metod Method Not Allowed – förväntat 405 (POST har inget id i adressen).
+# Test 15 – förväntat 405 (POST har inget id i adressen) – resultat: Fel metod Method Not Allowed 405
 # 405 Method Not Allowed (adressen finns i praktiken, men är ej nåbar med denna metod). (jämför med 404 adressen hittas inte alls)
 POST {{JStudio.Api_HostAddress}}/Ads/abc
 Content-Type: application/json 
@@ -81,8 +83,8 @@ Content-Type: application/json
 }
 
 ###
-# Test 8 – Uppdaterad (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
-PUT {{JStudio.Api_HostAddress}}/Ads/28
+# Test 8 – förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting) – resultat: Uppdaterad (positivt=) No Content 204
+PUT {{JStudio.Api_HostAddress}}/Ads/31
 Content-Type: application/json 
 
 {
@@ -95,7 +97,7 @@ Content-Type: application/json
 }
 
 ###
-# Test 9 – Finns inte Not Found – förväntat 404.
+# Test 9 – förväntat 404 – resultat: Finns inte Not Found 404
 PUT {{JStudio.Api_HostAddress}}/Ads/12
 Content-Type: application/json
 
@@ -109,8 +111,8 @@ Content-Type: application/json
 }
 
 ###
-# Test 10 – Ogiltig förfrågan Bad Request – förväntat 400 för att "abc" inte är decimal. Annonsen ska vara oförändrad.
-PUT {{JStudio.Api_HostAddress}}/Ads/29
+# Test 10 – förväntat 400 för att "abc" inte är decimal. Annonsen ska vara oförändrad – resultat: Ogiltig förfrågan Bad Request 400 "The updateAdDto field is required."
+PUT {{JStudio.Api_HostAddress}}/Ads/31
 Content-Type: application/json
 
 {
@@ -123,17 +125,17 @@ Content-Type: application/json
 }
 
 ###
-# Test 11 – Borttagen (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
-DELETE {{JStudio.Api_HostAddress}}/Ads/28
+# Test 11 – förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting) – resultat: Borttagen (positivt=) No Content 204
+DELETE {{JStudio.Api_HostAddress}}/Ads/31
 Accept: application/json
 
 ###
-# Test 12 – Finns inte Not Found – förväntat 404 (kör efter test 11).
+# Test 12 – förväntat 404 (kör efter test 11) – resultat: Finns inte Not Found
 DELETE {{JStudio.Api_HostAddress}}/Ads/28
 Accept: application/json 
 
 ###
-# Test 13 – Ogiltig förfrågan Bad Request – förväntat 400.
+# Test 13 – förväntat 400 – resultat: Ogiltig förfrågan Bad Request 400 
 DELETE {{JStudio.Api_HostAddress}}/Ads/abc
 Accept: application/json 
 
@@ -146,7 +148,7 @@ Accept: application/json
 # Test 7 (tom titel + NotSet i samma anrop) är uppdelat i Validering 1 och 2 – ett fel per test.
 
 ###
-# Validering 1 – Tom titel – förväntat 400 ([Required]).
+# Validering 1 – förväntat 400 Bad Request (iom [Required]) – resultat: Tom titel 400
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -160,7 +162,7 @@ Content-Type: application/json
 }
 
 ###
-# Validering 2 – Kategori NotSet – förväntat 400 ([Range(1, 8)]).
+# Validering 2 – förväntat 400 bad request ([Range(1, 8)]) (Kategori NotSet - resultat: 400 Bad request
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -174,7 +176,7 @@ Content-Type: application/json
 }
 
 ###
-# Validering 3 – Pris 0 – förväntat 400 ([Range(1, 3000)]).
+# Validering 3 – Pris 0 – förväntat 400 ([Range(1, 3000)]) - resultat: 400 Bad Request
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -188,7 +190,7 @@ Content-Type: application/json
 }
 
 ###
-# Validering 4 – Pris över max – förväntat 400 ([Range(1, 3000)]).
+# Validering 4 – förväntat 400 Bad Request iom ([Range(1, 3000)]) och här = Pris över max – resultat: 400 Bad Request 
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -202,7 +204,7 @@ Content-Type: application/json
 }
 
 ###
-# Validering 5 – Ogiltig bildadress – förväntat 400 ([Url]).
+# Validering 5 – förväntat 400 ([Url]) – resultat: 400 Bad Request iom Ogiltig bildadress 
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -216,7 +218,7 @@ Content-Type: application/json
 }
 
 ###
-# Validering 6 – Tom titel vid PUT – förväntat 400 ([Required]). Kontrollera sedan GET /Ads/2: titeln ska vara oförändrad.
+# Validering 6 – förväntat 400 ([Required]). Kontrollera sedan GET /Ads/2: titeln ska vara oförändrad – resultat: 400 bad request (iom Tom titel vid PUT) 
 PUT {{JStudio.Api_HostAddress}}/Ads/2
 Content-Type: application/json 
 
@@ -228,3 +230,92 @@ Content-Type: application/json
   "imageUrl": null,
   "category": "BallpointPens"
 }
+
+###
+# --- PATCH (VG) ---
+
+###
+# PATCH 1 – Ändra bara priset – förväntat 204 No Content. Kontrollera sedan GET /Ads/29: pris 45, övrigt oförändrat. resultat: 204 No Content
+PATCH {{JStudio.Api_HostAddress}}/Ads/29
+Content-Type: application/json-patch+json
+
+[
+  { "op": "replace", "path": "/price", "value": 45 }
+]
+
+###
+# PATCH 1 kontroll – GET /Ads/29, priset ska vara 45 – förväntat 200.
+GET {{JStudio.Api_HostAddress}}/Ads/29
+Accept: application/json
+
+
+
+
+
+
+###
+# PATCH 2 – Ändra id 12 som inte finns – förväntat 404 Not Found. resultat: 404 Not Found Kontrollera sedan GET /Ads/12: hittas icke
+PATCH {{JStudio.Api_HostAddress}}/Ads/12
+Content-Type: application/json-patch+json
+
+[
+  { "op": "replace", "path": "/price", "value": 45 }
+]
+
+###
+# PATCH 2 kontroll – GET /Ads/12 – förväntat 404 Not Found.
+GET {{JStudio.Api_HostAddress}}/Ads/12
+Accept: application/json
+
+
+
+
+
+###
+# PATCH 3 – Ändra bara priset till 0 (ej inom [Range])– förväntat 400. resultat: 400 bad request. Kontrollera sedan igen GET /Ads/29: oförändrat. Errorinfo: "The field Price must be between 1 and 3000."
+PATCH {{JStudio.Api_HostAddress}}/Ads/29
+Content-Type: application/json-patch+json
+
+[
+  { "op": "replace", "path": "/price", "value": 0 }
+]
+
+###
+# PATCH 3 kontroll – GET /Ads/29, priset ska vara oförändrat – förväntat 200 OK.
+GET {{JStudio.Api_HostAddress}}/Ads/29
+Accept: application/json
+
+
+
+###
+# PATCH 4 – Försök ändra id (finns inte i UpdateAdDto) – förväntat 400 Bad Request. Errormeddelande: "The target location specified by path segment 'id' was not found." restult: 400 bad request. Kontrollera sedan GET /Ads/29: id fortfarande 29.
+PATCH {{JStudio.Api_HostAddress}}/Ads/29
+Content-Type: application/json-patch+json
+
+[
+  { "op": "replace", "path": "/id", "value": 99 }
+]
+
+###
+# PATCH 4 kontroll – GET /Ads/29 – förväntat 200 OK.
+GET {{JStudio.Api_HostAddress}}/Ads/29
+Accept: application/json
+
+
+
+
+###
+# PATCH 5 – Ändra flera fält samtidigt – förväntat 204 No Content. resultat: 204 No Content. Kontrollera sedan GET /Ads/29: pris 13, ny titel, Sundbyberg – beskrivning och kategori oförändrade.
+PATCH {{JStudio.Api_HostAddress}}/Ads/29
+Content-Type: application/json-patch+json
+
+[
+  { "op": "replace", "path": "/price", "value": 13 },
+  { "op": "replace", "path": "/title", "value": "Blå Ballpoint-penna" },
+  { "op": "replace", "path": "/location", "value": "Sundbyberg" }
+]
+
+###
+# PATCH 5 kontroll – GET /Ads/29 – förväntat 200 OK.
+GET {{JStudio.Api_HostAddress}}/Ads/29
+Accept: application/json
