@@ -45,7 +45,6 @@ namespace JStudio.Api.Services
             await _applicationDbContext.SaveChangesAsync();
 
             return ad;
-
         }
 
         public async Task<bool> UpdateAdAsync(int id, UpdateAdDto updateAdDto)
@@ -68,7 +67,6 @@ namespace JStudio.Api.Services
             await _applicationDbContext.SaveChangesAsync();
 
             return true;
-
         }
 
         public async Task<bool> DeleteAdAsync(int id)
@@ -85,6 +83,28 @@ namespace JStudio.Api.Services
             await _applicationDbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<UpdateAdDto?> GetAdToUpdateByIdAsync(int id) // ? = kan vara null
+        {
+            var ad = await GetSingleAdByIdAsync(id);
+
+            if (ad == null)
+            { 
+                return null;
+            }
+
+            var updateAdDto = new UpdateAdDto
+            {
+                Title = ad.Title,
+                Price = ad.Price,
+                Description = ad.Description,
+                Location = ad.Location,
+                ImageUrl = ad.ImageUrl,
+                Category = ad.Category,
+            };
+
+            return updateAdDto;
         }
     }
 }

@@ -41,6 +41,7 @@ NuGet-paketen (EF Core, Swashbuckle med flera) står i `JStudio.Api.csproj` och 
 | `POST /Ads` | Skapar en annons | 201 Created (med `Location`-header) | – | 400 Bad Request |
 | `PUT /Ads/{id}` | Ersätter alla fält i en annons | 204 No Content | 404 Not Found | 400 Bad Request |
 | `DELETE /Ads/{id}` | Tar bort en annons | 204 No Content | 404 Not Found | 400 Bad Request |
+| `PATCH /Ads/{id}` | Ändrar bara de fält som skickas med | 204 No Content | 404 Not Found | 400 Bad Request |
 
 Exempel på body för `POST` och `PUT`:
 
@@ -59,11 +60,37 @@ Exempel på body för `POST` och `PUT`:
 
 `id`, `created` och `updated` sätts av servern, inte av klienten.
 
+### PATCH
+
+`PATCH` tar emot en lista med ändringar (JSON Patch) med headern `Content-Type: application/json-patch+json`:
+
+```json
+[
+  { "op": "replace", "path": "/price", "value": 45 }
+]
+```
+
+Bara de fält som finns i listan ändras. `path` är fältets namn: `/title`, `/price`, `/description`, `/location`, `/imageUrl` eller `/category`. `id`, `created` och `updated` går inte att ändra.
+
+### Validering
+
+Data som skickas med `POST`, `PUT` och `PATCH` kontrolleras på servern. Bryter den mot en regel blir svaret **400 Bad Request**, och under `errors` står vilket fält som är fel.
+
+| Fält | Regel |
+|---|---|
+| `title` | obligatorisk, högst 100 tecken |
+| `price` | 1–3000 kr |
+| `description` | obligatorisk, högst 2000 tecken |
+| `location` | obligatorisk, högst 100 tecken |
+| `imageUrl` | valfri, men måste vara en giltig webbadress om den skickas med |
+| `category` | ett av de tillåtna värdena ovan (`NotSet` godkänns inte) |
+
 ## Testa
 
 **Swagger:** välj en endpoint → *Try it out* → *Execute*.
 
-**`.http`-filen:** öppna `JStudio.Api/JStudio.Api.http` i Visual Studio och klicka på *Send request* ovanför ett anrop. Filen innehåller 13 tester (normalfall, id som inte finns, felaktig data och fel metod), och varje test har en kommentar med förväntad statuskod.
+**`.http`-filen:** öppna `JStudio.Api/JStudio.Api.http` i Visual Studio och klicka på *Send request* ovanför ett anrop. Filen innehåller tester för alla endpoints (normalfall, id som inte finns, felaktig data och fel metod), validering och PATCH. Varje test har en kommentar med förväntad statuskod, och numren följer testloggen.
 
-- Kör `POST` först och byt `28` i PUT- och DELETE-blocken mot det id som POST ger.
+- Kör `POST` (Test 5) först och byt id:t i PUT-, PATCH- och DELETE-blocken mot det id som POST ger.
+- Kör DELETE-testerna sist, eftersom de tar bort annonsen.
 - API:t måste vara igång (F5). Står det *"An error occurred while sending the request"* är API:t inte startat.
