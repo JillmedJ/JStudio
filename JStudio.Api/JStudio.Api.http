@@ -2,27 +2,29 @@
 
 # Kör POST först. Byt 28 i PUT och DELETE mot det id som POST ger.
 
-# OK – förväntat 200.
+# Testnumren (Test 1, Test 2 …) är samma som i testloggen i "Redovisning APIAnnons.md".
+
+# Test 1 – OK – förväntat 200.
 GET {{JStudio.Api_HostAddress}}/Ads/
 Accept: application/json
 
 ###
-# OK – förväntat 200.
+# Test 2 – OK – förväntat 200.
 GET {{JStudio.Api_HostAddress}}/Ads/2
 Accept: application/json
 
 ###
-# Finns inte Not Found – förväntat 404.
+# Test 3 – Finns inte Not Found – förväntat 404.
 GET {{JStudio.Api_HostAddress}}/Ads/12
 Accept: application/json
 
 ###
-# Ogiltig förfrågan Bad Request – förväntat 400.
+# Test 4 – Ogiltig förfrågan Bad Request – förväntat 400.
 GET {{JStudio.Api_HostAddress}}/Ads/abc
 Accept: application/json
 
 ###
-# Skapad Created – förväntat 201.
+# Test 5 – Skapad Created – förväntat 201. (Också regressionstest efter valideringen: en giltig annons ska godkännas.)
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -36,7 +38,7 @@ Content-Type: application/json
 }
 
 ###
-# Ogiltig förfrågan Bad Request – förväntat 400 för att "abc" inte är decimal ("could not be converted to System.Decimal").
+# Test 6 – Ogiltig förfrågan Bad Request – förväntat 400 för att "abc" inte är decimal ("could not be converted to System.Decimal").
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -50,7 +52,7 @@ Content-Type: application/json
 }
 
 ###
-# Ogiltig förfrågan Bad Request – förväntat 400 för att abc gör att JSON inte kan läsas = trasig syntax ("'a' is an invalid start of a value")
+# Test 14 – Ogiltig förfrågan Bad Request – förväntat 400 för att abc gör att JSON inte kan läsas = trasig syntax ("'a' is an invalid start of a value")
 POST {{JStudio.Api_HostAddress}}/Ads
 Content-Type: application/json 
 
@@ -64,7 +66,7 @@ Content-Type: application/json
 }
 
 ###
-# Fel metod Method Not Allowed – förväntat 405 (POST har inget id i adressen).
+# Test 15 – Fel metod Method Not Allowed – förväntat 405 (POST har inget id i adressen).
 # 405 Method Not Allowed (adressen finns i praktiken, men är ej nåbar med denna metod). (jämför med 404 adressen hittas inte alls)
 POST {{JStudio.Api_HostAddress}}/Ads/abc
 Content-Type: application/json 
@@ -79,7 +81,7 @@ Content-Type: application/json
 }
 
 ###
-# Uppdaterad (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
+# Test 8 – Uppdaterad (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
 PUT {{JStudio.Api_HostAddress}}/Ads/28
 Content-Type: application/json 
 
@@ -93,9 +95,9 @@ Content-Type: application/json
 }
 
 ###
-# Finns inte Not Found – förväntat 404.
+# Test 9 – Finns inte Not Found – förväntat 404.
 PUT {{JStudio.Api_HostAddress}}/Ads/12
-Content-Type: application/json 
+Content-Type: application/json
 
 {
   "title": "BallpointPens 0,4 mm, mörkgrå",
@@ -107,20 +109,122 @@ Content-Type: application/json
 }
 
 ###
-# Borttagen (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
+# Test 10 – Ogiltig förfrågan Bad Request – förväntat 400 för att "abc" inte är decimal. Annonsen ska vara oförändrad.
+PUT {{JStudio.Api_HostAddress}}/Ads/29
+Content-Type: application/json
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": "abc",
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Test 11 – Borttagen (positivt=) No Content– förväntat 204 (visar ingenting, för att säkerställa att API:ns påstående dubbelkolla med SQL. Detta gäller här också eftersom det inte visas någonting).
 DELETE {{JStudio.Api_HostAddress}}/Ads/28
 Accept: application/json
 
 ###
-# Finns inte Not Found – förväntat 404.
+# Test 12 – Finns inte Not Found – förväntat 404 (kör efter test 11).
 DELETE {{JStudio.Api_HostAddress}}/Ads/28
 Accept: application/json 
 
 ###
-# Ogiltig förfrågan Bad Request – förväntat 400.
+# Test 13 – Ogiltig förfrågan Bad Request – förväntat 400.
 DELETE {{JStudio.Api_HostAddress}}/Ads/abc
 Accept: application/json 
 
 
 
 
+
+###
+# --- Validering (VG) ---
+# Test 7 (tom titel + NotSet i samma anrop) är uppdelat i Validering 1 och 2 – ett fel per test.
+
+###
+# Validering 1 – Tom titel – förväntat 400 ([Required]).
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "",
+  "price": 54,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Validering 2 – Kategori NotSet – förväntat 400 ([Range(1, 8)]).
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 54,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "NotSet"
+}
+
+###
+# Validering 3 – Pris 0 – förväntat 400 ([Range(1, 3000)]).
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 0,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Validering 4 – Pris över max – förväntat 400 ([Range(1, 3000)]).
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 3001,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
+
+###
+# Validering 5 – Ogiltig bildadress – förväntat 400 ([Url]).
+POST {{JStudio.Api_HostAddress}}/Ads
+Content-Type: application/json 
+
+{
+  "title": "BallpointPens 0,4 mm, mörkgrå",
+  "price": 23,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": "Inte en adress",
+  "category": "BallpointPens"
+}
+
+###
+# Validering 6 – Tom titel vid PUT – förväntat 400 ([Required]). Kontrollera sedan GET /Ads/2: titeln ska vara oförändrad.
+PUT {{JStudio.Api_HostAddress}}/Ads/2
+Content-Type: application/json 
+
+{
+  "title": "",
+  "price": 23,
+  "description": "Annan färg på locket, men knappt använd så fungerar som ny!",
+  "location": "Strängnäs",
+  "imageUrl": null,
+  "category": "BallpointPens"
+}
